@@ -27,6 +27,8 @@ optimizer = torch.optim.SGD(encoder_stacks.parameters(), lr=1)
 src = torch.rand(1, 2, 32,requires_grad=True)
 tgt = torch.rand(1, 2, 32)
 
+print(src)
+
 encoder_stacks.train()
 
 for i in range(100):

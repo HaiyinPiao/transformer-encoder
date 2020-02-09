@@ -85,13 +85,13 @@ class Encoder(nn.Module):
 
     def __init__(
             self, n_layers, n_head, d_k, d_v,
-            d_model, d_inner, dropout=0.1):
+            d_model, d_inner, d_word_vec, n_position, dropout=0.1):
 
         super().__init__()
 
         # self.src_word_emb = nn.Embedding(n_src_vocab, d_word_vec, padding_idx=pad_idx)
         # self.position_enc = PositionalEncoding(d_word_vec, n_position=n_position)
-        # self.dropout = nn.Dropout(p=dropout)
+        self.dropout = nn.Dropout(p=dropout)
         self.layer_stack = nn.ModuleList([
             EncoderLayer(d_model, d_inner, n_head, d_k, d_v, dropout=dropout)
             for _ in range(n_layers)])
@@ -102,9 +102,9 @@ class Encoder(nn.Module):
         enc_slf_attn_list = []
 
         # -- Forward
-        
+        # enc_output = self.dropout(self.position_enc(src_seq))
         # enc_output = self.dropout(self.position_enc(self.src_word_emb(src_seq)))
-        enc_output = src_seq
+        enc_output = self.dropout(src_seq)
 
         for enc_layer in self.layer_stack:
             enc_output, enc_slf_attn = enc_layer(enc_output, slf_attn_mask=src_mask)
